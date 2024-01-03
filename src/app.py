@@ -1,6 +1,6 @@
 import streamlit as st
 from pickle import load
-import pickle
+
 
 st.markdown('<style>h1 { color: brown; }</style>', unsafe_allow_html=True)
 # Website title
@@ -35,7 +35,7 @@ region_val = st.selectbox("From what region are you?:",
                         )
 
 # load factorized values
-fact_val = load(open("/workspaces/ml-webapp-streamlit/data/processed/fact_val.pk", "rb"))
+fact_val = load(open("../data/processed/fact_val.pk", "rb"))
 
 # prediction buttom
 if st.button("prediction"):
@@ -46,14 +46,13 @@ if st.button("prediction"):
            fact_val["region"][region_val.lower()],
            fact_val["sex"][sex_val.lower()]
            ]
-    
 
     # load scaler
-    scaler = load(open("/workspaces/ml-webapp-streamlit/models/normalized_scaler.pk", "rb"))
+    scaler = load(open("../models/normalized_scaler.pk", "rb"))
     scal_row = scaler.transform([row])
 
     # load model
-    model = load(open("/workspaces/ml-webapp-streamlit/models/linear_model.pk", "rb"))
+    model = load(open("../models/linear_model.pk", "rb"))
     y_pred = model.predict([row])
 
     st.text("The cost of your insurance is: " + str(round(y_pred[0, 0], 2)))
